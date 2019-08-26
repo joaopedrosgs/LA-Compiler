@@ -17,7 +17,8 @@ public class AnalisadorSemanticoLA extends laBaseVisitor<Void> {
         return null;
     }
 
-    @Override public Void visitIdentificador(laParser.IdentificadorContext ctx) {
+    @Override
+    public Void visitIdentificador(laParser.IdentificadorContext ctx) {
         pilhaDeTabelas.topo().adicionarSimbolo(ctx.ident1.getText(),"variavel");
         return visitChildren(ctx);
     }
