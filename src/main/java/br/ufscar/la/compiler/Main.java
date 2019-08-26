@@ -1,6 +1,7 @@
 package br.ufscar.la.compiler;
 
 
+import LA.AnalisadorSemanticoLA;
 import LA.laLexer;
 import LA.laParser;
 import org.antlr.v4.runtime.CharStream;
@@ -33,6 +34,10 @@ public class Main {
             if (saidaParser.HasError()) {
                 throw new ParseCancellationException("Exceção gerada no léxico/sintático.");
             }
+
+            AnalisadorSemanticoLA asla = new AnalisadorSemanticoLA();
+            asla.visitPrograma(arvore);
+
         } catch (ParseCancellationException pce) {
             if (pce.getMessage() != null) {
                 saidaParser.println("Fim da compilacao");
