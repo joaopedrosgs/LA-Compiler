@@ -16,7 +16,7 @@ NUM_REAL: (ALGARISMO)+ '.' (ALGARISMO)+;
 
 
 // Cadeia de caracteres
-CADEIA:  '"'  (~('\\'|'"'))* '"';
+CADEIA:  '"'  (~('\\'|'"'|'\n'))* '"';
 
 // Identificador
 IDENT: (LETRA|'_') ('_'|ALGARISMO|LETRA)*;

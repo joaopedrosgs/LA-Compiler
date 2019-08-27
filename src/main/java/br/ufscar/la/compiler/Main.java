@@ -9,7 +9,9 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -19,6 +21,7 @@ public class Main {
         }
         SaidaParser saidaParser = new SaidaParser();
         CharStream input = CharStreams.fromFileName(args[0]);
+        PrintWriter pw = new PrintWriter(new FileOutputStream(args[1]));
 
         laLexer lexer = new laLexer(input);
         CommonTokenStream stream = new CommonTokenStream(lexer);
@@ -47,6 +50,9 @@ public class Main {
         if (saidaParser.HasError()) {
             System.out.println(saidaParser.toString());
         }
+        pw.print(saidaParser.toString());
+        pw.flush();
+        pw.close();
 
 
     }

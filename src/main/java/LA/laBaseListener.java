@@ -1,4 +1,4 @@
-// Generated from /home/pedro/NetBeansProjects/la-compiler/src/main/antlr/la.g4 by ANTLR 4.7.2
+// Generated from /home/pedro/LA-Compiler/src/main/antlr4/la.g4 by ANTLR 4.7.2
 package LA;
 
 import org.antlr.v4.runtime.ParserRuleContext;
