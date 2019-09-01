@@ -1,16 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package t1;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author daniel
- */
 public class TabelaDeSimbolos {
     private String escopo;
     private List<EntradaTabelaDeSimbolos> simbolos;

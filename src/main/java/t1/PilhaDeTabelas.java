@@ -1,15 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package t1;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- *
- * @author daniel
- */
 public class PilhaDeTabelas {
 
     private LinkedList<TabelaDeSimbolos> pilha;

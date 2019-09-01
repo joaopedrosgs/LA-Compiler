@@ -6,6 +6,8 @@
       <module name="Compilador-LA-master.test" target="12" />
       <module name="Compilador-LA_main" target="1.10" />
       <module name="Compilador-LA_test" target="1.10" />
+      <module name="LA-Compiler.main" target="12" />
+      <module name="LA-Compiler.test" target="12" />
     </bytecodeTargetLevel>
   </component>
 </project>

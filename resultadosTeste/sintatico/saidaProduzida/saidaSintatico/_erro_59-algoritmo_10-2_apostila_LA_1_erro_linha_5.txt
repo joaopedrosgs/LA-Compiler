@@ -1,4 +1,0 @@
-Linha 5: erro sintatico proximo a abc40
-Linha 11: erro sintatico proximo a :
-Linha 13: erro sintatico proximo a :
-Fim da compilacao

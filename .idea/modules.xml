@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Compilador-LA-master.iml" filepath="$PROJECT_DIR$/.idea/modules/Compilador-LA-master.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Compilador-LA-master.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Compilador-LA-master.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Compilador-LA-master.test.iml" filepath="$PROJECT_DIR$/.idea/modules/Compilador-LA-master.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/LA-Compiler.iml" filepath="$PROJECT_DIR$/.idea/modules/LA-Compiler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/LA-Compiler.main.iml" filepath="$PROJECT_DIR$/.idea/modules/LA-Compiler.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/LA-Compiler.test.iml" filepath="$PROJECT_DIR$/.idea/modules/LA-Compiler.test.iml" />
     </modules>
   </component>
 </project>

@@ -1,8 +1,5 @@
 package t1;
 
-/**
- * Created by lucas on 26/08/19.
- */
 public class AnalisadorSemanticoLA extends LABaseVisitor<Void> {
     PilhaDeTabelas pilhaDeTabelas = new PilhaDeTabelas();
 

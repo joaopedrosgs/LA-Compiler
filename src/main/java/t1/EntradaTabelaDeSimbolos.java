@@ -4,10 +4,6 @@
  */
 package t1;
 
-/**
- *
- * @author daniel
- */
 public class EntradaTabelaDeSimbolos {
     private String nome, tipo;
     
