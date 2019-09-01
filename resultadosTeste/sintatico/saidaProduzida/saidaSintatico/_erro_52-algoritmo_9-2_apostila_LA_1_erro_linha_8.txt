@@ -1,0 +1,4 @@
+Linha 8: erro sintatico proximo a ]
+Linha 13: erro sintatico proximo a valor1
+Linha 26: erro sintatico proximo a fim_procedimento
+Fim da compilacao

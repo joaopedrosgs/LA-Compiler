@@ -1,0 +1,66 @@
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+clean {
+    file('resultadosTeste').deleteDir()
+}
+
+task fatJar(type: Jar) {
+    description = 'Generates compiler executable.'
+    manifest {
+        attributes 'Main-Class': 't1.Main'
+    }
+    baseName = 'cla'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+task genAntlr(type: Exec) {
+    dependsOn('fatJar')
+    description = 'Tests parser execution.'
+    executable = "antlr4"
+    args  = ["-visitor", "${rootDir}/src/main/java/LA.g4", "-o", "${rootDir}/src/main/java/t1", "-package", "t1"]
+}
+
+
+String testResultsDir = "${rootDir}/resultadosTeste/"
+
+
+task testParser(type: Exec) {
+    dependsOn('fatJar')
+    description = 'Tests parser execution.'
+    executable = "java"
+    args  = ["-jar", "${rootDir}/libs/CorretorTrabalho1.jar", "java -jar ${rootDir}/build/libs/cla.jar", 'gcc',
+	     "${testResultsDir}/sintatico", "${rootDir}/src/test/casosDeTesteT1/", "G12", 'sintatico']
+}
+
+task testSemantic(type: Exec) {
+    dependsOn('fatJar')
+    description = 'Tests semantic analysis.'
+    executable = "java"
+    args  = ["-jar", "${rootDir}/libs/CorretorTrabalho1.jar", "java -jar ${rootDir}/build/libs/cla.jar", 'gcc',
+	     "${testResultsDir}/semantico", "${rootDir}/src/test/casosDeTesteT1/", "G12", 'semantico']
+}
+
+task testCodeGen(type: Exec) {
+    dependsOn('fatJar')
+    description = 'Tests code generation.'
+    executable = "java"
+    args  = ["-jar", "${rootDir}/libs/CorretorTrabalho1.jar", "java -jar ${rootDir}/build/libs/cla.jar", 'gcc',
+	     "${testResultsDir}/geracao", "${rootDir}/src/test/casosDeTesteT1/", "G12", 'gerador']
+}
+
+task testCompiler(type: Exec) {
+    dependsOn('fatJar')
+    description = 'Tests the entire compiler execution.'
+    executable = "java"
+    args  = ["-jar", "${rootDir}/libs/CorretorTrabalho1.jar", "java -jar ${rootDir}/build/libs/cla.jar", 'gcc',
+             "${testResultsDir}/", "${rootDir}/src/test/casosDeTesteT1/", "G12", 'tudo']
+}
+
+dependencies {
+    compile 'org.antlr:antlr4:4.7.1'
+}
