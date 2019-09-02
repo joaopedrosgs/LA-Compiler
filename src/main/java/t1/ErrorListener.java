@@ -17,6 +17,9 @@ public class ErrorListener implements ANTLRErrorListener {
 
     @Override
     public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
+        if(sp.HasError()) {
+            return;
+        }
         Token tk = (Token) offendingSymbol;
         String text = tk.getText();
 
