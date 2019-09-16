@@ -30,7 +30,7 @@ public class Main {
             }
         }
         if (!sp.HasError()) {
-            AnalisadorSemanticoLA asla = new AnalisadorSemanticoLA();
+            AnalisadorSemanticoLA asla = new AnalisadorSemanticoLA(sp);
             asla.visitPrograma(arvore);
             if (!sp.HasError()) {
 

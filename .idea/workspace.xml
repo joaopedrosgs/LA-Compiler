@@ -2,10 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="90001b70-4256-44e2-ad56-1bd4ee09bded" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/LA-Compiler.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/LA-Compiler.main.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/LA-Compiler.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/LA-Compiler.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/libs/cla.jar" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/cla.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/t1/ErrorListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/t1/ErrorListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/t1/AnalisadorSemanticoLA.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/t1/AnalisadorSemanticoLA.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/t1/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/t1/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/t1/PilhaDeTabelas.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/t1/PilhaDeTabelas.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/t1/TabelaDeSimbolos.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/t1/TabelaDeSimbolos.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -76,26 +83,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Gradle.Compilador-LA-master [testParser]">
-    <configuration name="Compilador-LA-master [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="clean" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Gradle.LA-Compiler [testSemantic]">
     <configuration name="Compilador-LA-master [fatJar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -172,13 +160,32 @@
       <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
       <method v="2" />
     </configuration>
+    <configuration name="LA-Compiler [testSemantic]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="testSemantic" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.LA-Compiler [testSemantic]" />
+        <item itemvalue="Gradle.Compilador-LA-master [testCompiler]" />
         <item itemvalue="Gradle.Compilador-LA-master [testParser]" />
         <item itemvalue="Gradle.Compilador-LA-master [fatJar]" />
         <item itemvalue="Gradle.Compilador-LA-master [genAntlr]" />
-        <item itemvalue="Gradle.Compilador-LA-master [testCompiler]" />
-        <item itemvalue="Gradle.Compilador-LA-master [clean]" />
       </list>
     </recent_temporary>
   </component>
@@ -205,7 +212,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>
