@@ -4,27 +4,26 @@ package t1;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class TabelaDeSimbolos {
     private String escopo;
     private List<EntradaTabelaDeSimbolos> simbolos;
 
     public TabelaDeSimbolos(String escopo) {
-        simbolos = new ArrayList<EntradaTabelaDeSimbolos>();
+        simbolos = new ArrayList<>();
         this.escopo = escopo;
     }
 
-    public void adicionarSimbolo(String nome, String tipo) {
-        simbolos.add(new EntradaTabelaDeSimbolos(nome,tipo));
+    public void adicionarSimbolo(String nome, String tipo, String tipoDeDado) {
+        simbolos.add(new EntradaTabelaDeSimbolos(nome, tipo, tipoDeDado));
     }
 
-    public void adicionarSimbolos(List<String> nomes, String tipo) {
-        for(String s:nomes) {
-            simbolos.add(new EntradaTabelaDeSimbolos(s, tipo));
-        }
+    public void adicionarSimbolo(EntradaTabelaDeSimbolos simbolo) {
+        simbolos.add(simbolo);
     }
 
     public boolean existeSimbolo(String nome) {
-        for(EntradaTabelaDeSimbolos etds:simbolos) {
+        for(EntradaTabelaDeSimbolos etds : simbolos) {
             if(etds.getNome().equals(nome)) {
                 return true;
             }
@@ -32,22 +31,20 @@ public class TabelaDeSimbolos {
         return false;
     }
 
-    public String getTipo(String nome) {
-        for(EntradaTabelaDeSimbolos etds:simbolos){
-            if (etds.getNome().equals(nome)) {
-                return etds.getTipo();
-            }
-        }
-        return "false";
+    public String getEscopo(){
+        return escopo;
     }
 
-
-    @Override
-    public String toString() {
-        String ret = "Escopo: "+escopo;
-        for(EntradaTabelaDeSimbolos etds:simbolos) {
-            ret += "\n   "+etds;
+    public EntradaTabelaDeSimbolos getSimbolo(String nome){
+        for(EntradaTabelaDeSimbolos etds : simbolos) {
+            if(etds.getNome().equals(nome)) {
+                return etds;
+            }
         }
-        return ret;
+        return null;
+    }
+
+    public List<EntradaTabelaDeSimbolos> getListaSimbolos(){
+        return simbolos;
     }
 }

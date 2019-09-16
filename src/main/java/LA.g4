@@ -1,9 +1,20 @@
 ﻿grammar LA;
 @lexer::members {void erroLexico(String msg) { throw new ParseCancellationException(msg); }}
 
-
+fragment ALGARISMO : '0'..'9';
 fragment LETRA: [a-zA-Z];
-fragment ALGARISMO: [0-9];
+
+IDENT: (LETRA|'_') ('_'|ALGARISMO|LETRA)*;
+
+CADEIA : '"' ~('\n' | '\r' | '"')* '"';
+
+NUM_INT : ALGARISMO+;
+
+NUM_REAL : ALGARISMO+ '.' ALGARISMO+;
+
+// Comentarios e espacos em branco são ignorados
+
+COMENTARIO: '{' ~('}'|'\n'|'\r')* '}' -> skip;
 
 // Ignorar espacos em branco
 WS:   (' ') -> skip;
@@ -11,103 +22,116 @@ WS:   (' ') -> skip;
 // Ignorar fim de linha
 ENDL:  ([\n] | [\t] | [\r]) -> skip;
 
-// Definicao de numeros retirado do documento da linguagem LA
-NUM_INT: (ALGARISMO)+;
-NUM_REAL: (ALGARISMO)+ '.' (ALGARISMO)+;
+programa : declaracoes 'algoritmo' corpo 'fim_algoritmo' ;
 
+declaracoes : decl_local_global*;
 
-// Cadeia de caracteres
-CADEIA:  '"'  (~('\\'|'"'|'\n'))* '"';
+decl_local_global : decl_local | decl_global;
 
-// Identificador
-IDENT: (LETRA|'_') ('_'|ALGARISMO|LETRA)*;
+decl_local : 'declare' variavel 
+    | 'constante' id1=IDENT ':' tipo_basico '=' valor_constante
+    | 'tipo' id2=IDENT ':' tipo;
 
-// Comantearios
-COMENTARIO: '{' ~('}'|'\n'|'\r')* '}' -> skip;
+variavel : id=identificador (',' outrosIds+=identificador)* ':' tipo;
 
-/* Trecho retirado do documento da linguagem LA e adaptado para o Antlr */
+identificador : id=IDENT ('.' outrosIds+=IDENT)* dimensao;
 
-// Declaracao da estrutura do arquivo
-programa : declaracoes 'algoritmo' corpo 'fim_algoritmo';
+dimensao : ('[' exp_aritmetica ']')*;
 
-// Declaracoes de variavel
-declaracoes : (decl_local_global)*;
-decl_local_global : declaracao_local | declaracao_global;
-declaracao_local : 	'declare' variavel
-				 |	'constante' IDENT ':' tipo_basico '=' valor_constante
-				 |	'tipo' IDENT ':' tipo;
+tipo : registro | tipo_estendido;
 
+tipo_basico : 'literal' | 'inteiro' | 'real' | 'logico';
 
-variavel : identificador1=identificador (',' outrosIdentificadores+=identificador)* ':' tipo ;
-identificador : ident1=IDENT ('.' outrosIdent+=IDENT)* dimensao ;
-dimensao : ('[' exp_aritimetica ']')* ;
+tipo_basico_ident : tipo_basico | IDENT;
 
-tipo : 	registro
-	 |	tipo_estendido ;
+tipo_estendido : '^'? tipo_basico_ident;
 
-tipo_basico : 'literal' | 'inteiro' | 'real' | 'logico' ;
-tipo_basico_ident : tipo_basico | IDENT ;
-tipo_estendido : ('^')? tipo_basico_ident ;
-valor_constante : CADEIA | NUM_INT | NUM_REAL | 'verdadeiro' | 'falso' ;
-registro : 'registro' (variavel)* 'fim_registro' ;
+valor_constante : CADEIA | NUM_INT | NUM_REAL | 'verdadeiro' | 'falso';
 
-// Funcoes e procedimentos
-declaracao_global : 'procedimento' IDENT '(' (parametros)? ')' (listaDL+=declaracao_local)* (listaComandos+=cmd)* 'fim_procedimento' # declaracao_global_procedimento
-				  | 'funcao' IDENT '(' (parametros)? ')' ':' tipo_estendido (listaDL+=declaracao_local)* (listaComandos+=cmd)* 'fim_funcao' # declaracao_global_funcao
-				  ;
-parametro : ('var')? identificador1=identificador (',' outrosIdentificadores+=identificador)* ':' tipo_estendido ;
-parametros : parametro1=parametro (',' outrosParametros+=parametro)* ;
-corpo : (listaDL+=declaracao_local)* (listaComandos+=cmd)* ;
+registro : 'registro' variavel* 'fim_registro';
 
+decl_global : 'procedimento' ident1=IDENT '(' (params1=parametros)? ')' (decl1+=decl_local)* (c1+=cmd)* 'fim_procedimento'
+    | 'funcao' ident2=IDENT '(' (params2=parametros)? ')' ':' tipo_estendido (decl2+=decl_local)* (c2+=cmd)* 'fim_funcao';
 
+parametro : 'var'? id1=identificador (',' id2+=identificador)* ':' tipo_estendido;
 
-cmd : cmdLeia | cmdEscreva | cmdSe | cmdCaso | cmdPara | cmdEnquanto | cmdFaca |
-	  cmdAtribuicao | cmdChamada | cmdRetorne ;
+parametros : param1=parametro (',' param2+=parametro)*;
 
-cmdLeia : 'leia' '(' ('^')? id1=identificador (',' ('^')? outrosIds+=identificador)* ')' ;
-cmdEscreva : 'escreva' '(' exp1=expressao (',' outrasExp+=expressao)* ')' ;
-cmdSe : 'se' expressao 'entao' (cmdEntao+=cmd)* ('senao' (cmdSenao+=cmd)*)? 'fim_se' ;
-cmdCaso : 'caso' exp_aritimetica 'seja' selecao ('senao' (cmd)*)? 'fim_caso' ;
-cmdPara : 'para' IDENT '<-'exp_aritmetica1=exp_aritimetica 'ate' exp_aritmetica2=exp_aritimetica 'faca' (cmd)* 'fim_para' ;
-cmdEnquanto :  'enquanto' expressao 'faca' (cmd)* 'fim_enquanto' ;
-cmdFaca : 'faca' (cmd)* 'ate' expressao ;
-cmdAtribuicao : ('^')? identificador '<-' expressao ;
-cmdChamada : IDENT '(' exp1=expressao (',' outrasExp+=expressao)* ')' ;
-cmdRetorne : 'retorne' expressao ;
+corpo : decl_local* cmd*;
 
-selecao : (item_selecao)* ;
-item_selecao : constantes ':' (cmd)* ;
-constantes : numero_intervalo1=numero_intervalo (',' outrosNumero_intervalo+=numero_intervalo)* ;
-numero_intervalo : (op_unario1=op_unario)? ni1=NUM_INT ('..' (op_unario2+=op_unario)? ni2=NUM_INT)? ;
+cmd : cmdLeia | cmdEscreva | cmdSe | cmdCaso | cmdPara | cmdEnquanto | cmdFaca
+    | cmdAtribuicao | cmdChamada | cmdRetorne;
 
-// Operadores
-op_unario : '-' ;
-exp_aritimetica : termo1=termo (ops+=op1 outrosTermos+=termo)* ;
-termo : fator1=fator (ops+=op2 outrosFatores+=fator)* ;
-fator : parcela1=parcela (ops+=op3 parcela)* ;
-op1 : '+' | '-' ;
-op2 : '*' | '/' ;
-op3 : '%' ;
+cmdLeia : 'leia' '(' '^'? id1=identificador (',' '^'? id2+=identificador)* ')';
 
-parcela : (op_unario)? parcela_unario | parcela_nao_unario ;
-parcela_unario : ('^')? identificador # parcela_unario_id
-			   | IDENT '(' expressao (',' expressao)* ')' # parcela_unario_chamada
-			   | NUM_INT # parcela_unario_inteiro
-			   | NUM_REAL # parcela_unario_real
-			   | '(' expressao ')' # parcela_unario_expr
-			   ;
+cmdEscreva : 'escreva' '(' exp1=expressao (',' exp2+=expressao)* ')';
 
-parcela_nao_unario : '&' identificador # parcela_nao_unario_id
-                   | CADEIA # parcela_nao_unario_cadeia
-                   ;
-exp_relacional : exp_a1=exp_aritimetica (op_rs+=op_relacional outrosExp_a+=exp_aritimetica)? ;
-op_relacional : '=' | '<>' | '>=' | '<=' | '>' | '<' ;
-expressao : termo_l1=termo_logico (op_ls+=op_logico_1 outrosTermos+=termo_logico)* ;
-termo_logico : fator_l1=fator_logico (op_ls+=op_logico_2 outrosFatores+=fator_logico)* ;
-fator_logico : ('nao')? parcela_logica ;
-parcela_logica : ( 'verdadeiro' | 'falso') | exp_relacional ;
-op_logico_1 : 'ou' ;
-op_logico_2 : 'e' ;
+cmdSe : 'se' e1=expressao 'entao' (c1+=cmd)* ('senao' c2+=cmd*)? 'fim_se';
+
+cmdCaso : 'caso' exp_aritmetica 'seja' selecao ('senao' cmd*)? 'fim_caso';
+
+cmdPara : 'para' IDENT '<-' ea1=exp_aritmetica 'ate' ea2=exp_aritmetica 'faca' cmd* 'fim_para';
+
+cmdEnquanto : 'enquanto' expressao 'faca' cmd* 'fim_enquanto';
+
+cmdFaca : 'faca' cmd* 'ate' expressao;
+
+cmdAtribuicao : (ponteiro='^')? identificador '<-' expressao;
+
+cmdChamada : IDENT '(' exp=expressao (',' outrasExp+=expressao)* ')';
+
+cmdRetorne : 'retorne' expressao;
+
+selecao : item_selecao*;
+
+item_selecao : constantes ':' cmd*;
+
+constantes : ni1=numero_intervalo (',' ni2+=numero_intervalo)*;
+
+numero_intervalo : opu1=op_unario? ni1=NUM_INT ('..' (opu2=op_unario)? ni2=NUM_INT)?;
+
+op_unario : '-';
+
+exp_aritmetica : t1=termo (op1 outrosTermos+=termo)*;
+
+termo : f1=fator (op2 outrosFatores+=fator)*;
+
+fator : p1=parcela (op3 outrasParcelas+=parcela)*;
+
+op1 : '+' | '-';
+
+op2 : '*' | '/';
+
+op3 : '%';
+
+parcela : op_unario? parcela_unario | parcela_nao_unario;
+
+parcela_unario : '^'? identificador
+    | IDENT '(' exp1=expressao (',' exp2+=expressao)* ')'
+    | NUM_INT
+    | NUM_REAL
+    | '(' exp3=expressao ')'
+    ;
+
+parcela_nao_unario : '&' identificador | CADEIA;
+
+exp_relacional : e1=exp_aritmetica (op_relacional e2=exp_aritmetica)?;
+
+op_relacional : '=' | '<>' | '>=' | '<=' | '>'| '<';
+
+expressao : t1=termo_logico (op_logico1 t2+=termo_logico)*; 
+
+termo_logico : f1=fator_logico (op_logico2 f2+=fator_logico)*;
+
+fator_logico : (nao='nao')? parcela_logica;
+
+parcela_logica : 'verdadeiro' | 'falso' | exp_relacional;
+
+op_logico1 : 'ou';
+
+op_logico2 : 'e';
+
+// Regra especial para detectar erros léxicos no parser, onde é mais fácil obter informações sobre a parte da entrada que causou o erro
 
 COMENTARIO_NAO_FECHADO
 :   '{' .*?
@@ -118,6 +142,3 @@ ERRO_LEXICO
 :	.
 	{erroLexico("Linha " + getLine() + ": " + getText() + " - simbolo nao identificado");}
 ;
-
-
-/* Fim das regras da linguagem*/

@@ -2,23 +2,47 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="90001b70-4256-44e2-ad56-1bd4ee09bded" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/LA-Compiler.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/LA-Compiler.main.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/LA-Compiler.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/LA-Compiler.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/libs/cla.jar" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/cla.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/LA.g4" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/LA.g4" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/t1/AnalisadorSemanticoLA.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/t1/AnalisadorSemanticoLA.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/t1/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/t1/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/t1/EntradaTabelaDeSimbolos.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/t1/EntradaTabelaDeSimbolos.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/t1/LA.interp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/t1/LA.interp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/t1/LA.tokens" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/t1/LA.tokens" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/t1/LABaseListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/t1/LABaseListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/t1/LABaseVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/t1/LABaseVisitor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/t1/LALexer.interp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/t1/LALexer.interp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/t1/LALexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/t1/LALexer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/t1/LALexer.tokens" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/t1/LALexer.tokens" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/t1/LAListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/t1/LAListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/t1/LAParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/t1/LAParser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/t1/LAVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/t1/LAVisitor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/t1/PilhaDeTabelas.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/t1/PilhaDeTabelas.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/t1/TabelaDeSimbolos.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/t1/TabelaDeSimbolos.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/t1/Tipo.java" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
   </component>
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
@@ -60,16 +84,29 @@
       </state>
     </system>
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1QFqq4k3jqEI6VQxVQvhebaY9Rs" />
   <component name="PropertiesComponent">
+    <property name="$PROJECT_DIR$/src/main/java/LA.g4::/auto-gen" value="false" />
+    <property name="$PROJECT_DIR$/src/main/java/LA.g4::/gen-listener" value="true" />
+    <property name="$PROJECT_DIR$/src/main/java/LA.g4::/gen-visitor" value="true" />
+    <property name="$PROJECT_DIR$/src/main/java/LA.g4::/output-dir" value="$PROJECT_DIR$/src/main/java" />
+    <property name="$PROJECT_DIR$/src/main/java/LA.g4::/package" value="t1" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.project.gradle" />
+    <property name="extract.method.default.visibility" value="private" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/t1" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -182,8 +219,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.LA-Compiler [testSemantic]" />
-        <item itemvalue="Gradle.Compilador-LA-master [testCompiler]" />
         <item itemvalue="Gradle.Compilador-LA-master [testParser]" />
+        <item itemvalue="Gradle.Compilador-LA-master [testCompiler]" />
         <item itemvalue="Gradle.Compilador-LA-master [fatJar]" />
         <item itemvalue="Gradle.Compilador-LA-master [genAntlr]" />
       </list>
@@ -201,6 +238,8 @@
       <updated>1567376879590</updated>
       <workItem from="1567376881074" duration="4063000" />
       <workItem from="1567381848154" duration="572000" />
+      <workItem from="1568637697546" duration="13480000" />
+      <workItem from="1568654313021" duration="284000" />
     </task>
     <servers />
   </component>

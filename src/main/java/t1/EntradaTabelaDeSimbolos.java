@@ -1,27 +1,24 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package t1;
 
 public class EntradaTabelaDeSimbolos {
-    private String nome, tipo;
-    
-    public EntradaTabelaDeSimbolos(String nome, String tipo) {
+    private String nome, tipo, tipoDeDado;
+
+    public EntradaTabelaDeSimbolos(String nome, String tipo, String tipoDeDado) {
         this.nome = nome;
         this.tipo = tipo;
+        this.tipoDeDado = tipoDeDado;
     }
-    
+
     public String getNome() {
         return nome;
     }
-    
+
     public String getTipo() {
         return tipo;
     }
-    
-    @Override
-    public String toString() {
-        return nome+"("+tipo+")";
+
+    public String getTipoDeDado(){
+        return tipoDeDado;
     }
 }

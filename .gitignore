@@ -28,4 +28,6 @@
 hs_err_pid*
 
 
-/resultadosTeste/
+resultadosTeste/
+build/
+build/libs/
