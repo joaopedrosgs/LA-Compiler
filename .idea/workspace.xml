@@ -2,27 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="90001b70-4256-44e2-ad56-1bd4ee09bded" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/LA-Compiler.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/LA-Compiler.main.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/LA-Compiler.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/LA-Compiler.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/libs/cla.jar" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/cla.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/LA.g4" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/LA.g4" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/t1/AnalisadorSemanticoLA.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/t1/AnalisadorSemanticoLA.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/t1/EntradaTabelaDeSimbolos.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/t1/EntradaTabelaDeSimbolos.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/t1/LA.interp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/t1/LA.interp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/t1/LA.tokens" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/t1/LA.tokens" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/t1/LABaseListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/t1/LABaseListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/t1/LABaseVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/t1/LABaseVisitor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/t1/LALexer.interp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/t1/LALexer.interp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/t1/LALexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/t1/LALexer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/t1/LALexer.tokens" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/t1/LALexer.tokens" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/t1/LAListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/t1/LAListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/t1/LAParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/t1/LAParser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/t1/LAVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/t1/LAVisitor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/t1/PilhaDeTabelas.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/t1/PilhaDeTabelas.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/t1/TabelaDeSimbolos.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/t1/TabelaDeSimbolos.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/t1/Tipo.java" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
