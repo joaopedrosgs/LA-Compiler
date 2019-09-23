@@ -8,6 +8,7 @@ public class GeradorDeCodigo extends LABaseVisitor<String> {
     private PilhaDeTabelas pilhaDeTabelas;
 
     private SaidaParser sp;
+
     public GeradorDeCodigo(SaidaParser sp) {
         this.sp = sp;
         pilhaDeTabelas = new PilhaDeTabelas();
@@ -50,39 +51,48 @@ public class GeradorDeCodigo extends LABaseVisitor<String> {
     @Override
     public String visitPrograma(LAParser.ProgramaContext ctx){
 
-        visitDeclaracoes(ctx.declaracoes());
-        visitCorpo(ctx.corpo());
+        // Começando código com as importações básicas do C
+        sp.printCode("#include <stdio.h>\n" +
+                "#include <stdlib.h>\n");
+
+        sp.printCode(visitDeclaracoes(ctx.declaracoes()));
+        sp.printCode(visitCorpo(ctx.corpo()));
         return "";
     }
 
     @Override
     public String visitCorpo(LAParser.CorpoContext ctx){
-        ctx.decl_local().forEach(this::visitDecl_local);
-        ctx.cmd().forEach(this::visitCmd);
-        return "";
+        StringBuilder codigo = new StringBuilder("int main() {\n");
+        ctx.decl_local().stream().map(this::visitDecl_local).forEach(codigo::append);
+        ctx.cmd().stream().map(this::visitCmd).forEach(codigo::append);
+        codigo = codigo.append("}\n");
+        return codigo.toString();
     }
 
     @Override
     public String visitDeclaracoes(LAParser.DeclaracoesContext ctx){
-        ctx.decl_local_global().forEach(this::visitDecl_local_global);
-        return "";
+        StringBuilder codigo = new StringBuilder();
+        ctx.decl_local_global().stream().map(this::visitDecl_local_global).forEach(codigo::append);
+        return codigo.toString();
     }
 
     @Override
     public String visitDecl_local_global(LAParser.Decl_local_globalContext ctx){
+        StringBuilder codigo = new StringBuilder();
         if(ctx.decl_local() != null){
-            visitDecl_local(ctx.decl_local());
+            codigo.append(visitDecl_local(ctx.decl_local()));
         }
         else{
-            visitDecl_global(ctx.decl_global());
+            codigo.append(visitDecl_global(ctx.decl_global()));
         }
-        return "";
+        return codigo.toString();
     }
 
     @Override
     public String visitDecl_local(LAParser.Decl_localContext ctx){
+        StringBuilder codigo = new StringBuilder();
         if(ctx.variavel() != null){
-            visitVariavel(ctx.variavel());
+            codigo.append(visitVariavel(ctx.variavel()));
         }
         else if(ctx.id1 != null){
             String id_txt = ctx.id1.getText();
@@ -102,11 +112,12 @@ public class GeradorDeCodigo extends LABaseVisitor<String> {
             }
             visitTipo(ctx.tipo());
         }
-        return "";
+        return codigo.toString();
     }
 
     @Override
     public String visitVariavel(LAParser.VariavelContext ctx){
+        StringBuilder codigo = new StringBuilder();
         if(ctx.tipo().registro() != null){
             LinkedList<String> listaIds = new LinkedList<>();
             visitIdentificador(ctx.id);
@@ -208,7 +219,7 @@ public class GeradorDeCodigo extends LABaseVisitor<String> {
                 sp.println("Linha " + ctx.tipo().start.getLine() + ": tipo " + tipo_txt + " nao declarado");
             }
         }
-        return "";
+        return codigo.toString();
     }
 
     @Override
@@ -277,6 +288,7 @@ public class GeradorDeCodigo extends LABaseVisitor<String> {
 
     @Override
     public String visitDecl_global(LAParser.Decl_globalContext ctx){
+        String codigo = "";
         if(ctx.ident1 != null){ // caso seja identificador
             pilhaDeTabelas.topo().adicionarSimbolo(ctx.ident1.getText(), "procedimento", "");
             pilhaDeTabelas.functions.put(ctx.ident1.getText(), new LinkedList<>());
@@ -309,7 +321,7 @@ public class GeradorDeCodigo extends LABaseVisitor<String> {
             }
             pilhaDeTabelas.desempilhar();
         }
-        return "";
+        return codigo;
     }
 
 

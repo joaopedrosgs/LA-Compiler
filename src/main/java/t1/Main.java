@@ -33,7 +33,9 @@ public class Main {
             AnalisadorSemanticoLA asla = new AnalisadorSemanticoLA(sp);
             asla.visitPrograma(arvore);
             if (!sp.HasError()) {
-
+                // Gerar código aqui
+                GeradorDeCodigo gdc = new GeradorDeCodigo(sp);
+                gdc.visitPrograma(arvore);
             } else {
                 sp.print("Fim da compilacao");
             }
