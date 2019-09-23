@@ -19,6 +19,34 @@ public class GeradorDeCodigo extends LABaseVisitor<String> {
         return tipo.equals("inteiro") || tipo.equals("real");
     }
 
+    private String parseLogicalFactor(LAParser.Fator_logicoContext factor) {
+        if(factor.nao == null){
+            return factor.parcela_logica().getText();
+        }
+        else{
+            return "!" + factor.parcela_logica().getText();
+        }
+    }
+
+    private String parseLogicalTerm(LAParser.Termo_logicoContext term) {
+        StringBuilder ret = new StringBuilder(parseLogicalFactor(term.f1));
+        for(LAParser.Fator_logicoContext factor : term.f2){
+            ret.append("&&");
+            ret.append(parseLogicalFactor(factor));
+        }
+        return ret.toString();
+    }
+
+    private String parseExpression(LAParser.ExpressaoContext expr) {
+        StringBuilder ret = new StringBuilder(parseLogicalTerm(expr.t1));
+        for(LAParser.Termo_logicoContext term : expr.t2){
+            ret.append("||");
+            ret.append(parseLogicalTerm(term));
+        }
+        return ret.toString().replaceAll("=", "==").replaceAll("<>", "!=").replaceAll(">==", ">=").replaceAll("<==", "<=");
+    }
+
+
     // Função auxiliar para verificar o tipo de retorno de uma operação binária
     private String tipoRetorno(String operacao, String op1, String op2){
         switch (operacao) {
@@ -404,18 +432,48 @@ public class GeradorDeCodigo extends LABaseVisitor<String> {
     }
     @Override
     public String visitCmdEscreva(LAParser.CmdEscrevaContext ctx){
-        StringBuilder codigo = new StringBuilder("printf(");
+        StringBuilder codigo = new StringBuilder("printf(\"");
+
         String tipo = visitExpressao(ctx.exp1);
 
         switch(tipo) {
-            case "inteiro": codigo.append("\"%d\""); break;
-            case "real": codigo.append("\"%f\""); break;
-            case "literal": codigo.append("\"%s\""); break;
+            case "inteiro":
+                codigo.append("%d");
+                break;
+            case "real":
+                codigo.append("%f");
+                break;
+            case "literal":
+                codigo.append("%s");
+                break;
             default: break;
         }
 
-        codigo.append("," + ctx.exp1.getText() + ");");
-        ctx.exp2.forEach(this::visitExpressao);
+        for (LAParser.ExpressaoContext exp : ctx.exp2) {
+            String tip_exp = visitExpressao(exp);
+
+            switch(tip_exp) {
+                case "inteiro":
+                    codigo.append("%d");
+                    break;
+                case "real":
+                    codigo.append("%f");
+                    break;
+                case "literal":
+                    codigo.append("%s");
+                    break;
+                default: break;
+            }
+        }
+
+        codigo.append("\", " + ctx.exp1.getText());
+
+        for (LAParser.ExpressaoContext exp : ctx.exp2) {
+            codigo.append(", " + parseExpression(exp));
+        }
+
+        codigo.append(");");
+
         return codigo.toString();
     }
     @Override
@@ -458,13 +516,20 @@ public class GeradorDeCodigo extends LABaseVisitor<String> {
 
     @Override
     public String visitCmdSe(LAParser.CmdSeContext ctx){
-        visitExpressao(ctx.e1);
-        ctx.c1.forEach(this::visitCmd);
-        if (ctx.c2 != null) {
-            ctx.c2.forEach(this::visitCmd);
+        StringBuilder codigo = new StringBuilder("if (");
+        codigo.append(parseExpression(ctx.e1) + ") {\n");
 
+        for (LAParser.CmdContext comm : ctx.c1) {
+            codigo.append(visitCmd(comm));
         }
-        return "";
+        if (ctx.c2 != null) {
+            codigo.append("} else {\n");
+            for (LAParser.CmdContext comm : ctx.c2) {
+                codigo.append(visitCmd(comm));
+            }
+        }
+        codigo.append("}\n");
+        return codigo.toString();
     }
 
     @Override
@@ -507,37 +572,17 @@ public class GeradorDeCodigo extends LABaseVisitor<String> {
 
     @Override
     public String visitCmdAtribuicao(LAParser.CmdAtribuicaoContext ctx){
-        String tipoId = visitIdentificador(ctx.identificador());
-        if(tipoId.equals("")) tipoId = "tipo_invalido";
-        String id_txt = ctx.identificador().getText();
-        String id_txt_certo = id_txt + "";
-        if(id_txt.indexOf('[') != -1) id_txt = id_txt.substring(0, id_txt.indexOf('['));
-        // variavel ponteiro atribuindo no conteudo apontado
+        StringBuilder codigo = new StringBuilder();
+
+        // Estamos atribuindo algo à posição de um ponteiro
         if(ctx.ponteiro != null){
-            id_txt = "^" + id_txt;
-            id_txt_certo = "^" + id_txt_certo;
-            tipoId = tipoId.substring(1);
-        }
-        // variavel ponteiro atribuindo um endereço
-        else if(tipoId.charAt(0) == '^'){
-            id_txt = "^" + id_txt;
+            codigo.append("*");
         }
 
         String tipoExp = visitExpressao(ctx.expressao());
-        if(!pilhaDeTabelas.existeSimbolo(id_txt)){
-            sp.println("Linha " + ctx.identificador().start.getLine() + ": identificador " + id_txt_certo + " nao declarado");
-        }
-        else{
-            if(tipoId.charAt(0) == '^'){
-                if(tipoExp.charAt(0) != '&' || !tipoId.substring(1).equals(tipoExp.substring(1))){
-                    sp.println("Linha " + ctx.identificador().start.getLine() + ": atribuicao nao compativel para " + id_txt);
-                }
-            }
-            else if(!tipoId.equals(tipoExp) && !(IsNumber(tipoId) && IsNumber(tipoExp))){
-                sp.println("Linha " + ctx.identificador().start.getLine() + ": atribuicao nao compativel para " + id_txt_certo);
-            }
-        }
-        return "";
+        codigo.append(ctx.identificador().getText() + " = " + ctx.expressao().getText() + ";");
+
+        return codigo.toString();
     }
 
     @Override
@@ -549,9 +594,13 @@ public class GeradorDeCodigo extends LABaseVisitor<String> {
 
     @Override
     public String visitCmdRetorne(LAParser.CmdRetorneContext ctx){
+        StringBuilder codigo = new StringBuilder();
         if(!pilhaDeTabelas.topo().getEscopo().equals("funcao"))
             sp.println("Linha " + ctx.start.getLine() + ": comando retorne nao permitido nesse escopo");
+
+        codigo.append("return ");
         visitExpressao(ctx.expressao());
+        codigo.append(parseExpression(ctx.expressao()));
         return "";
     }
 
