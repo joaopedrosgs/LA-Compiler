@@ -82,6 +82,7 @@ public class GeradorDeCodigo extends LABaseVisitor<String> {
         // Começando código com as importações básicas do C
         sp.printCode("#include <stdio.h>\n" +
                 "#include <stdlib.h>\n" +
+                // Inclusão do string.h pois alguns casos necessitam do strcpy
                 "#include <string.h>\n");
 
         sp.printCode(visitDeclaracoes(ctx.declaracoes()));
@@ -206,12 +207,36 @@ public class GeradorDeCodigo extends LABaseVisitor<String> {
         else if(ctx.parent.parent.parent instanceof LAParser.Decl_localContext){
             String idRegistro = ((LAParser.Decl_localContext)ctx.parent.parent.parent).id2.getText();
             String tipo_txt = ctx.tipo().getText();
+            String idAtrib = ctx.id.getText();
+
             visitIdentificador(ctx.id);
             pilhaDeTabelas.structs.get(idRegistro).add(new EntradaTabelaDeSimbolos(ctx.id.getText(), "variavel", tipo_txt));
             for(LAParser.IdentificadorContext id : ctx.outrosIds){
                 visitIdentificador(id);
                 pilhaDeTabelas.structs.get(idRegistro).add(new EntradaTabelaDeSimbolos(id.getText(), "variavel", tipo_txt));
             }
+
+            boolean isArray = false;
+            // Declarado um vetor. Pegamos o nome dele
+            if(idAtrib.indexOf('[') != -1) {
+                idAtrib = idAtrib.substring(0, idAtrib.indexOf('['));
+                isArray = true;
+            };
+
+            boolean ehPonteiro = ctx.tipo().getText().charAt(0) == '^';
+
+            if (ehPonteiro) tipo_txt = tipo_txt.substring(1);
+
+            switch(tipo_txt) {
+                case "inteiro": codigo.append("int "); break;
+                case "real": codigo.append("float "); break;
+                case "literal": codigo.append("char "); break;
+                default: break;
+            }
+
+            if(ehPonteiro) codigo.append("*");
+            codigo.append(idAtrib);
+            if (tipo_txt.equals("literal")) codigo.append("[50]");
         }
         // variaveis básicas
         else{
@@ -233,7 +258,7 @@ public class GeradorDeCodigo extends LABaseVisitor<String> {
                 case "inteiro": codigo.append("int "); break;
                 case "real": codigo.append("float "); break;
                 case "literal": codigo.append("char "); break;
-                default: break;
+                default: codigo.append(tipo_txt).append(" ");
             }
 
             if(ehPonteiro){
@@ -244,7 +269,28 @@ public class GeradorDeCodigo extends LABaseVisitor<String> {
 
             }
             else{
-                pilhaDeTabelas.topo().adicionarSimbolo(id_txt, "variavel", tipo_txt);
+                if(pilhaDeTabelas.structs.get(tipo_txt) != null){
+                    LinkedList <EntradaTabelaDeSimbolos> listaSimbolos = pilhaDeTabelas.structs.get(tipo_txt);
+                    if(!pilhaDeTabelas.existeSimbolo(id_txt)){
+                        for(EntradaTabelaDeSimbolos simbolo : listaSimbolos){
+                            pilhaDeTabelas.topo().adicionarSimbolo(id_txt + "." + simbolo.getNome(), simbolo.getTipo(), simbolo.getTipoDeDado());
+                        }
+                        pilhaDeTabelas.topo().adicionarSimbolo(id_txt, "variavel", tipo_txt);
+                    }
+
+                    for(LAParser.IdentificadorContext id : ctx.outrosIds){
+                        visitIdentificador(id);
+                        id_txt = id.getText();
+                        if(!pilhaDeTabelas.existeSimbolo(id_txt)){
+                            for(EntradaTabelaDeSimbolos simbolo : listaSimbolos){
+                                pilhaDeTabelas.topo().adicionarSimbolo(id_txt + "." + simbolo.getNome(), simbolo.getTipo(), simbolo.getTipoDeDado());
+                            }
+                            pilhaDeTabelas.topo().adicionarSimbolo(id_txt, "variavel", tipo_txt);
+                        }
+                    }
+                } else {
+                    pilhaDeTabelas.topo().adicionarSimbolo(id_txt, "variavel", tipo_txt);
+                }
             }
 
             codigo.append(id_txt);
@@ -467,9 +513,9 @@ public class GeradorDeCodigo extends LABaseVisitor<String> {
             case "literal":
                 codigo.append("%s");
                 break;
-            default: break;
+            // Tipo extendido
+            default: ;
         }
-
         for (LAParser.ExpressaoContext exp : ctx.exp2) {
             String tip_exp = visitExpressao(exp);
 
@@ -778,16 +824,10 @@ public class GeradorDeCodigo extends LABaseVisitor<String> {
             String tipo = visitIdentificador(ctx.identificador());
             String id_txt = ctx.identificador().getText();
             if(id_txt.indexOf('[') != -1) id_txt = id_txt.substring(0, id_txt.indexOf('['));
-            if(!pilhaDeTabelas.existeSimbolo(id_txt)){
-                sp.println("Linha " + ctx.identificador().start.getLine() + ": identificador " + id_txt + " nao declarado");
-            }
             return tipo;
         }
         else if(ctx.IDENT() != null){
             String id_txt = ctx.IDENT().getText();
-            if(!pilhaDeTabelas.existeSimbolo(id_txt)){
-                sp.println("Linha " + ctx.IDENT().getSymbol().getLine() + ": identificador " + id_txt + " nao declarado");
-            }
             String tipoExp = visitExpressao(ctx.exp1);
             LinkedList<String> listaParams = pilhaDeTabelas.functions.get(id_txt);
             boolean compativel = true;
@@ -818,9 +858,6 @@ public class GeradorDeCodigo extends LABaseVisitor<String> {
         if(ctx.identificador() != null){
             String tipo = visitIdentificador(ctx.identificador());
             String id_txt = ctx.identificador().getText();
-            if(!pilhaDeTabelas.existeSimbolo(id_txt)){
-                sp.println("Linha " + ctx.identificador().start.getLine() + ": identificador " + id_txt + " nao declarado");
-            }
             return "&" + tipo;
         }
         else{
