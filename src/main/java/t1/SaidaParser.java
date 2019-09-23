@@ -3,10 +3,12 @@ package t1;
 public class SaidaParser {
 
     private StringBuffer err_buffer;
+    private StringBuffer code_buffer;
     private boolean has_error;
 
     public SaidaParser() {
         err_buffer = new StringBuffer();
+        code_buffer = new StringBuffer();
         has_error = false;
     }
 
@@ -14,6 +16,10 @@ public class SaidaParser {
         if(!has_error) has_error = true;
         err_buffer.append(msg);
         err_buffer.append("\n");
+    }
+
+    public void printCode(String code) {
+        code_buffer.append(code);
     }
 
     public void print(String texto) {
@@ -27,7 +33,7 @@ public class SaidaParser {
 
     @Override
     public String toString() {
-        return err_buffer.toString();
+        return has_error ? err_buffer.toString() : code_buffer.toString();
     }
 
     public void reset() {

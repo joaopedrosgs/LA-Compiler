@@ -65,7 +65,7 @@ public class GeradorDeCodigo extends LABaseVisitor<String> {
         StringBuilder codigo = new StringBuilder("int main() {\n");
         ctx.decl_local().stream().map(this::visitDecl_local).forEach(codigo::append);
         ctx.cmd().stream().map(this::visitCmd).forEach(codigo::append);
-        codigo = codigo.append("}\n");
+        codigo = codigo.append("return 0;\n}\n");
         return codigo.toString();
     }
 
@@ -184,19 +184,35 @@ public class GeradorDeCodigo extends LABaseVisitor<String> {
             }
             else{
                 if(!pilhaDeTabelas.existeSimbolo(id_txt)){
+
+                    switch(tipo_txt) {
+                        case "inteiro": codigo.append("int "); break;
+                        case "real": codigo.append("float "); break;
+                        case "literal": codigo.append("char "); break;
+                        default: break;
+                    }
+
                     if(tipo_txt.charAt(0) == '^'){
                         pilhaDeTabelas.topo().adicionarSimbolo("^" + id_txt, "variavel", tipo_txt.substring(1));
                         pilhaDeTabelas.topo().adicionarSimbolo(id_txt, "variavel", tipo_txt);
+
+                        codigo.append("*");
+
                     }
                     else{
                         pilhaDeTabelas.topo().adicionarSimbolo(id_txt, "variavel", tipo_txt);
                     }
+
+                    codigo.append(id_txt);
+
+                    if (tipo_txt.equals("literal")) codigo.append("[50]");
                 }
                 else if(!(ctx.parent instanceof LAParser.RegistroContext)){
                     sp.println("Linha " + ctx.id.start.getLine() + ": identificador " + id_txt + " ja declarado anteriormente");
                 }
 
                 for(LAParser.IdentificadorContext id : ctx.outrosIds){
+                    codigo.append(", ");
                     visitIdentificador(id);
                     id_txt = id.getText();
                     if(id_txt.indexOf('[') != -1) id_txt = id_txt.substring(0, id_txt.indexOf('['));
@@ -204,21 +220,26 @@ public class GeradorDeCodigo extends LABaseVisitor<String> {
                         if(tipo_txt.charAt(0) == '^'){
                             pilhaDeTabelas.topo().adicionarSimbolo("^" + id_txt, "variavel", tipo_txt.substring(1));
                             pilhaDeTabelas.topo().adicionarSimbolo(id_txt, "variavel", tipo_txt);
+                            codigo.append("*");
                         }
                         else{
                             pilhaDeTabelas.topo().adicionarSimbolo(id_txt, "variavel", tipo_txt);
                         }
+
+                        codigo.append(id_txt);
+
+                        if (tipo_txt.equals("literal")) codigo.append("[50]");
                     }
                     else if(!(ctx.parent instanceof LAParser.RegistroContext)){
                         sp.println("Linha " + id.start.getLine() + ": identificador " + id_txt + " ja declarado anteriormente");
                     }
                 }
+
             }
             visitTipo(ctx.tipo());
-            if(!pilhaDeTabelas.existeSimbolo(tipo_txt)){
-                sp.println("Linha " + ctx.tipo().start.getLine() + ": tipo " + tipo_txt + " nao declarado");
-            }
         }
+
+        codigo.append(";\n");
         return codigo.toString();
     }
 
@@ -354,52 +375,83 @@ public class GeradorDeCodigo extends LABaseVisitor<String> {
 
     @Override
     public String visitCmd(LAParser.CmdContext ctx){
+        StringBuilder codigo = new StringBuilder();
         if (ctx.cmdLeia() != null){
-            visitCmdLeia(ctx.cmdLeia());
+            codigo.append(visitCmdLeia(ctx.cmdLeia()));
         }else if (ctx.cmdEscreva() != null){
-            visitCmdEscreva(ctx.cmdEscreva());
+            codigo.append(visitCmdEscreva(ctx.cmdEscreva()));
         }else if (ctx.cmdSe() != null){
-            visitCmdSe(ctx.cmdSe());
+            codigo.append(visitCmdSe(ctx.cmdSe()));
         }else if (ctx.cmdCaso() != null){
-            visitCmdCaso(ctx.cmdCaso());
+            codigo.append(visitCmdCaso(ctx.cmdCaso()));
         }else if (ctx.cmdPara() != null){
-            visitCmdPara(ctx.cmdPara());
+            codigo.append(visitCmdPara(ctx.cmdPara()));
         }else if (ctx.cmdEnquanto() != null){
-            visitCmdEnquanto(ctx.cmdEnquanto());
+            codigo.append(visitCmdEnquanto(ctx.cmdEnquanto()));
         }else if (ctx.cmdFaca() != null){
-            visitCmdFaca(ctx.cmdFaca());
+            codigo.append(visitCmdFaca(ctx.cmdFaca()));
         }else if (ctx.cmdAtribuicao() != null){
-            visitCmdAtribuicao(ctx.cmdAtribuicao());
+            codigo.append(visitCmdAtribuicao(ctx.cmdAtribuicao()));
         }else if (ctx.cmdChamada() != null){
-            visitCmdChamada(ctx.cmdChamada());
+            codigo.append(visitCmdChamada(ctx.cmdChamada()));
         }else if (ctx.cmdRetorne() != null){
-            visitCmdRetorne(ctx.cmdRetorne());
+            codigo.append(visitCmdRetorne(ctx.cmdRetorne()));
         }
-        return "";
+
+        codigo.append("\n");
+
+        return codigo.toString();
     }
     @Override
     public String visitCmdEscreva(LAParser.CmdEscrevaContext ctx){
-        visitExpressao(ctx.exp1);
+        StringBuilder codigo = new StringBuilder("printf(");
+        String tipo = visitExpressao(ctx.exp1);
+
+        switch(tipo) {
+            case "inteiro": codigo.append("\"%d\""); break;
+            case "real": codigo.append("\"%f\""); break;
+            case "literal": codigo.append("\"%s\""); break;
+            default: break;
+        }
+
+        codigo.append("," + ctx.exp1.getText() + ");");
         ctx.exp2.forEach(this::visitExpressao);
-        return "";
+        return codigo.toString();
     }
     @Override
     public String visitCmdLeia(LAParser.CmdLeiaContext ctx){
+        StringBuilder codigo = new StringBuilder("scanf(");
         String id_txt = ctx.id1.getText();
+
         if(id_txt.indexOf('[') != -1) id_txt = id_txt.substring(0, id_txt.indexOf('['));
-        if(!pilhaDeTabelas.existeSimbolo(id_txt)){
-            sp.println("Linha " + ctx.id1.start.getLine() + ": identificador " + id_txt + " nao declarado");
+
+        String tipo = visitIdentificador(ctx.id1);
+
+        switch(tipo) {
+            case "inteiro": codigo.append("\"%d\""); break;
+            case "real": codigo.append("\"%f\""); break;
+            case "literal": codigo.append("\"%s\""); break;
+            default: break;
         }
-        visitIdentificador(ctx.id1);
+
+        codigo.append(",&" + id_txt + ");");
+
         for(LAParser.IdentificadorContext id : ctx.id2){
             id_txt = id.getText();
             if(id_txt.indexOf('[') != -1) id_txt = id_txt.substring(0, id_txt.indexOf('['));
-            if(!pilhaDeTabelas.existeSimbolo(id_txt)){
-                sp.println("Linha " + ctx.id1.start.getLine() + ": identificador " + id_txt + " nao declarado");
+
+            tipo = visitIdentificador(id);
+
+            switch(tipo) {
+                case "inteiro": codigo.append("\"%d\""); break;
+                case "real": codigo.append("\"%f\""); break;
+                case "literal": codigo.append("\"%s\""); break;
+                default: break;
             }
-            visitIdentificador(id);
+
+            codigo.append(",&" + id_txt + ")");
         }
-        return "";
+        return codigo.toString();
     }
 
 
