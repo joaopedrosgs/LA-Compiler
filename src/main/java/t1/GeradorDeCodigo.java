@@ -154,12 +154,17 @@ public class GeradorDeCodigo extends LABaseVisitor<String> {
             String id_txt = ctx.id2.getText();
             String tipo = ctx.tipo().getText();
 
-            if (tipo.equals("registro")) {
-                codigo.append("typedef struct {\n");
-
-                codigo.append(visitTipo(ctx.tipo()));
-
+            if(ctx.tipo().registro() != null){
+                pilhaDeTabelas.structs.put(id_txt, new LinkedList<EntradaTabelaDeSimbolos>());
+                pilhaDeTabelas.topo().adicionarSimbolo(id_txt, "registro", "");
             }
+            else{
+                pilhaDeTabelas.topo().adicionarSimbolo(id_txt, "tipo", ctx.tipo().getText());
+            }
+
+            codigo.append("typedef struct {\n");
+            codigo.append(visitTipo(ctx.tipo()));
+            codigo.append("}").append(id_txt+";\n");
 
         }
         return codigo.toString();
@@ -211,9 +216,12 @@ public class GeradorDeCodigo extends LABaseVisitor<String> {
         // variaveis básicas
         else{
             String id_txt = ctx.id.getText();
-
+            boolean isArray = false;
             // Declarado um vetor. Pegamos o nome dele
-            if(id_txt.indexOf('[') != -1) id_txt = id_txt.substring(0, id_txt.indexOf('['));
+            if(id_txt.indexOf('[') != -1) {
+                id_txt = id_txt.substring(0, id_txt.indexOf('['));
+                isArray = true;
+            };
 
             String tipo_txt = ctx.tipo().getText();
 
@@ -240,6 +248,7 @@ public class GeradorDeCodigo extends LABaseVisitor<String> {
             }
 
             codigo.append(id_txt);
+            if (isArray) codigo.append(visitDimensao(ctx.id.dimensao()));
 
             if (tipo_txt.equals("literal")) codigo.append("[50]");
 
@@ -247,7 +256,12 @@ public class GeradorDeCodigo extends LABaseVisitor<String> {
                 codigo.append(", ");
                 visitIdentificador(id);
                 id_txt = id.getText();
-                if(id_txt.indexOf('[') != -1) id_txt = id_txt.substring(0, id_txt.indexOf('['));
+                if(id_txt.indexOf('[') != -1){
+                    id_txt = id_txt.substring(0, id_txt.indexOf('['));
+                    isArray = true;
+                } else {
+                    isArray = false;
+                }
                 if(!pilhaDeTabelas.existeSimbolo(id_txt)){
                     if(ehPonteiro){
                         pilhaDeTabelas.topo().adicionarSimbolo("^" + id_txt, "variavel", tipo_txt);
@@ -259,6 +273,7 @@ public class GeradorDeCodigo extends LABaseVisitor<String> {
                     }
 
                     codigo.append(id_txt);
+                    if (isArray) codigo.append(visitDimensao(id.dimensao()));
 
                     if (tipo_txt.equals("literal")) codigo.append("[50]");
                 }
@@ -285,10 +300,13 @@ public class GeradorDeCodigo extends LABaseVisitor<String> {
 
     @Override
     public String visitDimensao(LAParser.DimensaoContext ctx){
+        StringBuilder codigo = new StringBuilder("[");
         for(LAParser.Exp_aritmeticaContext exp : ctx.exp_aritmetica()){
+            codigo.append(exp.getText());
             visitExp_aritmetica(exp);
         }
-        return "";
+        codigo.append("]");
+        return codigo.toString();
     }
 
     @Override
