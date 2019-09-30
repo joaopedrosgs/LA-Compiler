@@ -95,7 +95,7 @@ public class GeradorDeCodigo extends LABaseVisitor<String> {
         StringBuilder codigo = new StringBuilder("int main() {\n");
         ctx.decl_local().stream().map(this::visitDecl_local).forEach(codigo::append);
         ctx.cmd().stream().map(this::visitCmd).forEach(codigo::append);
-        codigo = codigo.append("return 0;\n}\n");
+        codigo.append("return 0;\n}\n");
         return codigo.toString();
     }
 
@@ -165,7 +165,7 @@ public class GeradorDeCodigo extends LABaseVisitor<String> {
 
             codigo.append("typedef struct {\n");
             codigo.append(visitTipo(ctx.tipo()));
-            codigo.append("}").append(id_txt+";\n");
+            codigo.append("}").append(id_txt).append(";\n");
 
         }
         return codigo.toString();
@@ -401,43 +401,55 @@ public class GeradorDeCodigo extends LABaseVisitor<String> {
         }
         return codigo.toString();
     }
-
+    public String tipoLAparaTipoC(String tipo) {
+        if(tipo.charAt(0) == '^') tipo = tipo.substring(1);
+        if(tipo.equals("inteiro") || tipo.equals("logico")) return "int";
+        if(tipo.equals("real")) return "float";
+        if(tipo.equals("literal")) return "char*";
+        return "";
+    }
     @Override
     public String visitDecl_global(LAParser.Decl_globalContext ctx){
-        String codigo = "";
+        StringBuilder codigo = new StringBuilder() ;
         if(ctx.ident1 != null){ // caso seja identificador
-            pilhaDeTabelas.topo().adicionarSimbolo(ctx.ident1.getText(), "procedimento", "");
+
             pilhaDeTabelas.functions.put(ctx.ident1.getText(), new LinkedList<>());
             pilhaDeTabelas.empilhar(new TabelaDeSimbolos("procedimento"));
             pilhaDeTabelas.topo().adicionarSimbolo(ctx.ident1.getText(), "procedimento", "");
+            codigo.append("void ").append(ctx.ident1.getText());
             if(ctx.params1 != null){
-                visitParametros(ctx.params1);
+                codigo.append(visitParametros(ctx.params1)).append("{").append("\n");
             }
             for(LAParser.Decl_localContext decl : ctx.decl1){
-                visitDecl_local(decl);
+                codigo.append(visitDecl_local(decl));
             }
             for(LAParser.CmdContext cmd : ctx.c1){
-                visitCmd(cmd);
+                codigo.append(visitCmd(cmd));
             }
             pilhaDeTabelas.desempilhar();
-        }else { // caso seja funcao
+            codigo.append("\n}");
+        } else if(ctx.ident2 != null) { // caso seja funcao
             pilhaDeTabelas.topo().adicionarSimbolo(ctx.ident2.getText(), "funcao", ctx.tipo_estendido().getText());
             pilhaDeTabelas.functions.put(ctx.ident2.getText(), new LinkedList<>());
             pilhaDeTabelas.empilhar(new TabelaDeSimbolos("funcao"));
             pilhaDeTabelas.topo().adicionarSimbolo(ctx.ident2.getText(), "funcao", ctx.tipo_estendido().getText());
+            codigo.append(tipoLAparaTipoC(visitTipo_estendido(ctx.tipo_estendido()))).append(" ").append(ctx.ident2.getText());
             if(ctx.params2 != null){
-                visitParametros(ctx.params2);
+                codigo.append(visitParametros(ctx.params2));
             }
-            visitTipo_estendido(ctx.tipo_estendido());
+            codigo.append("{\n");
             for(LAParser.Decl_localContext decl : ctx.decl2){
-                visitDecl_local(decl);
+                codigo.append(visitDecl_local(decl));
             }
             for(LAParser.CmdContext cmd : ctx.c2){
-                visitCmd(cmd);
+                codigo.append(visitCmd(cmd));
             }
             pilhaDeTabelas.desempilhar();
+            codigo.append("\n}");
+
         }
-        return codigo;
+
+        return codigo.append("\n").toString();
     }
 
 
@@ -455,17 +467,22 @@ public class GeradorDeCodigo extends LABaseVisitor<String> {
 
     @Override
     public String visitParametros(LAParser.ParametrosContext ctx){
+        StringBuilder codigo =  new StringBuilder();
+        codigo.append("(");
         LAParser.Decl_globalContext declGlobal = ((LAParser.Decl_globalContext)(ctx.parent));
         String nomeFuncao;
         if(declGlobal.ident1 != null) nomeFuncao = declGlobal.ident1.getText(); // procedimento
         else nomeFuncao = declGlobal.ident2.getText(); // função
         String tipoParam = visitParametro(ctx.param1);
+        codigo.append(tipoLAparaTipoC(tipoParam)).append(" ").append(ctx.param1.id1.getText());
         pilhaDeTabelas.functions.get(nomeFuncao).add(tipoParam);
         for(LAParser.ParametroContext param : ctx.param2){
             tipoParam = visitParametro(param);
+            codigo.append(", ").append(tipoLAparaTipoC(tipoParam)).append(" ").append(param.identificador.getText());
             pilhaDeTabelas.functions.get(nomeFuncao).add(tipoParam);
         }
-        return "";
+        codigo.append(")");
+        return codigo.toString();
     }
 
     @Override
@@ -516,10 +533,13 @@ public class GeradorDeCodigo extends LABaseVisitor<String> {
             // Tipo extendido
             default: ;
         }
+        codigo.append("\", " + ctx.exp1.getText()).append(");\n");
+
         for (LAParser.ExpressaoContext exp : ctx.exp2) {
+            codigo.append("printf(\"");
             String tip_exp = visitExpressao(exp);
 
-            switch(tip_exp) {
+            switch (tip_exp) {
                 case "inteiro":
                     codigo.append("%d");
                     break;
@@ -529,17 +549,15 @@ public class GeradorDeCodigo extends LABaseVisitor<String> {
                 case "literal":
                     codigo.append("%s");
                     break;
-                default: break;
+                default:
+                    break;
+
+
             }
+            codigo.append("\", " + exp.getText()).append(");\n");
+
         }
 
-        codigo.append("\", " + ctx.exp1.getText());
-
-        for (LAParser.ExpressaoContext exp : ctx.exp2) {
-            codigo.append(", " + parseExpression(exp));
-        }
-
-        codigo.append(");");
 
         return codigo.toString();
     }
@@ -686,9 +704,13 @@ public class GeradorDeCodigo extends LABaseVisitor<String> {
 
     @Override
     public String visitCmdChamada(LAParser.CmdChamadaContext ctx){
+        StringBuilder codigo = new StringBuilder();
+        codigo.append(ctx.id1.getText()).append("(");
+        codigo.append(ctx.exp.t1.getText());
         visitExpressao(ctx.exp);
         ctx.outrasExp.forEach(this::visitExpressao);
-        return "";
+        codigo.append(");");
+        return codigo.toString();
     }
 
     @Override
@@ -700,7 +722,7 @@ public class GeradorDeCodigo extends LABaseVisitor<String> {
         codigo.append("return ");
         visitExpressao(ctx.expressao());
         codigo.append(parseExpression(ctx.expressao()));
-        return codigo.toString();
+        return codigo.append(";").toString();
     }
 
     @Override

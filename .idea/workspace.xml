@@ -2,12 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="90001b70-4256-44e2-ad56-1bd4ee09bded" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/LA-Compiler.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/LA-Compiler.main.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/LA-Compiler.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/LA-Compiler.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/libs/cla.jar" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/cla.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/LA.g4" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/LA.g4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/t1/GeradorDeCodigo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/t1/GeradorDeCodigo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/t1/LAParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/t1/LAParser.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -91,7 +91,7 @@
     <property name="aspect.path.notification.shown" value="true" />
     <property name="extract.method.default.visibility" value="private" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/t1" />
-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -105,8 +105,8 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Gradle.LA-Compiler [testSemantic]">
-    <configuration name="Compilador-LA-master [fatJar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+  <component name="RunManager" selected="Gradle.LA-Compiler [testCompiler]">
+    <configuration name="LA-Compiler [fatJar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -125,7 +125,7 @@
       <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="Compilador-LA-master [genAntlr]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="LA-Compiler [genAntlr]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -144,7 +144,45 @@
       <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="Compilador-LA-master [testCompiler]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="LA-Compiler [processTestResources]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="processTestResources" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="LA-Compiler [testCodeGen]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="testCodeGen" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="LA-Compiler [testCompiler]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -163,51 +201,13 @@
       <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="Compilador-LA-master [testParser]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="testParser" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
-      <method v="2" />
-    </configuration>
-    <configuration name="LA-Compiler [testSemantic]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="testSemantic" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
-      <method v="2" />
-    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.LA-Compiler [testSemantic]" />
-        <item itemvalue="Gradle.Compilador-LA-master [testParser]" />
-        <item itemvalue="Gradle.Compilador-LA-master [testCompiler]" />
-        <item itemvalue="Gradle.Compilador-LA-master [fatJar]" />
-        <item itemvalue="Gradle.Compilador-LA-master [genAntlr]" />
+        <item itemvalue="Gradle.LA-Compiler [testCodeGen]" />
+        <item itemvalue="Gradle.LA-Compiler [processTestResources]" />
+        <item itemvalue="Gradle.LA-Compiler [genAntlr]" />
+        <item itemvalue="Gradle.LA-Compiler [testCompiler]" />
+        <item itemvalue="Gradle.LA-Compiler [fatJar]" />
       </list>
     </recent_temporary>
   </component>

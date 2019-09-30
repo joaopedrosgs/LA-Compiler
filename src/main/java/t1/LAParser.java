@@ -2172,6 +2172,7 @@ public class LAParser extends Parser {
 	}
 
 	public static class CmdChamadaContext extends ParserRuleContext {
+		public Token id1;
 		public ExpressaoContext exp;
 		public ExpressaoContext expressao;
 		public List<ExpressaoContext> outrasExp = new ArrayList<ExpressaoContext>();
@@ -2209,7 +2210,7 @@ public class LAParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(385);
-			match(IDENT);
+			((CmdChamadaContext)_localctx).id1 = match(IDENT);
 			setState(386);
 			match(T__21);
 			setState(387);

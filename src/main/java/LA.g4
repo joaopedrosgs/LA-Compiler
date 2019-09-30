@@ -78,7 +78,7 @@ cmdFaca : 'faca' cmd* 'ate' expressao;
 
 cmdAtribuicao : (ponteiro='^')? identificador '<-' expressao;
 
-cmdChamada : IDENT '(' exp=expressao (',' outrasExp+=expressao)* ')';
+cmdChamada : id1=IDENT '(' exp=expressao (',' outrasExp+=expressao)* ')';
 
 cmdRetorne : 'retorne' expressao;
 
